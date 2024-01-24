@@ -6,7 +6,7 @@
 .wicked-note {
     font-family: "Fira code", "Fira Mono", source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
     background:rgba(129, 129, 129, 0.226);
-    margin:20px;
+    margin:16px;
     padding: 0px;
     line-height: 20px;
 }
@@ -46,7 +46,7 @@ pointer-events: var(--pre-pointer-events, auto) !important;
 }
 
 .wicked-note-link {
-  color:aqua;
+  color:skyblue;
   text-decoration:none;
 
 }
@@ -62,9 +62,9 @@ pointer-events: var(--pre-pointer-events, auto) !important;
 }
 
 .wicked-note-active-content{
-  outline: 2px solid rgba(2, 111, 253, 0.14);
-  background: rgba(2, 111, 253, 0.14);
-  border-radius: 3px;
+  outline: 2px solid rgba(2, 111, 253, 0.10);
+  background: rgba(2, 111, 253, 0.10);
+  border-radius: 2px;
   position: relative;
   pointer-events: auto;
   z-index: 2;
@@ -75,7 +75,7 @@ pointer-events: var(--pre-pointer-events, auto) !important;
   outline: 2px solid rgba(2, 111, 253, 0.24);
   background: rgba(2, 111, 253, 0.24);
   border-radius: 3px;
-  text-shadow: 1px 1px 5px;
+  text-shadow: 1px 1px 4px;
 }
 
 .wicked-note-badge{

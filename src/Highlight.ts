@@ -47,9 +47,9 @@ function Highlight(text : string) : string
     text = text.replaceAll(/(@\w+)/g, '<span class="wicked-note-mention">$1</span>');
 
     // Http link.
-    // TODO: Remove hardcoded server address.
+    // TODO: Remove hardcoded server address - the path depends on how the app is setup on GitHub pages.
     // TODO: encode URL as Base64.
-    text = text.replaceAll(/((http:\/\/|https:\/\/)[^\s]+)/g, '<a class="wicked-note-link wicked-note-active-content" href="#" onclick="window.open(\'http://localhost:3000/?url=$1\',\'PageOpener\'); return false;">$1</a>');
+    text = text.replaceAll(/((http:\/\/|https:\/\/)[^\s]+)/g, '<a class="wicked-note-link wicked-note-active-content" href="#" onclick="window.open(\'https://mamutko.github.io/notes/?url=$1\',\'PageOpener\'); return false;">$1</a>');
 
     // Badge
     // text = text.replaceAll(/((http:\/\/|https:\/\/)[^\s]+)/g, '<span class="wicked-note-link" style="position:relative;"><div class="wicked-note-badge">&plus;</div>$1</a>');

@@ -1,3 +1,35 @@
+# Notes
+
+A simple web app for taking notes.
+
+## Cheat sheet
+
+### How was this app created
+
+npx create-react-app wicked-notes --template typescript 
+npm start 
+npm install react-simple-code-editor 
+
+### Deploy localy
+
+npm install -g serve
+npm fund
+serve -s build
+
+### Hosting on GitHub pages
+
+npm install --save gh-pages
+
+Update package.json:
+
+"homepage": "http://mamutko.github.io/notes", 
+
+"scripts":
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
+
+npm run deploy
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

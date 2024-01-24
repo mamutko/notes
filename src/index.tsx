@@ -17,7 +17,7 @@ const root = ReactDOM.createRoot(
 // );
 
 root.render(
-  <App />
+  <div className='wicked-notes-app'><App /></div>
 )
 ;
 // If you want to start measuring performance in your app, pass a function
