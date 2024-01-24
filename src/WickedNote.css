@@ -1,0 +1,104 @@
+.wicked-note-timestamp-container{
+  visibility: hidden;
+  display: none;
+}
+
+.wicked-note {
+    font-family: "Fira code", "Fira Mono", source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+    background:rgba(129, 129, 129, 0.226);
+    margin:20px;
+    padding: 0px;
+    line-height: 20px;
+}
+
+.npm__react-simple-code-editor__textarea {
+    pointer-events: var(--texarea-pointer-events, auto) !important;
+    outline: none;
+  }
+  
+.wicked-note-enclosing-pre {
+pointer-events: var(--pre-pointer-events, auto) !important;
+}
+
+.wicked-note-heading{
+    background:  rgba(40, 45, 92, 0.25);
+    border-radius: 0px;
+    font-weight:bold;
+    position:absolute;
+    width: 100%;
+
+  }
+
+.wicked-note-tag{
+    color:burlywood;    
+}
+
+.wicked-note-tag-todo{
+  color:orange;
+}
+
+.wicked-note-tag-done{
+  color:lightseagreen;
+}
+
+.wicked-note-mention{
+    color:lightgreen;    
+}
+
+.wicked-note-link {
+  color:aqua;
+  text-decoration:none;
+
+}
+
+.wicked-note i {
+  color:purple;
+  font-style:normal;
+}
+
+.wicked-note b {
+  color:darkorange;
+  font-weight: normal;
+}
+
+.wicked-note-active-content{
+  outline: 2px solid rgba(2, 111, 253, 0.14);
+  background: rgba(2, 111, 253, 0.14);
+  border-radius: 3px;
+  position: relative;
+  pointer-events: auto;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.wicked-note-active-content:hover{
+  outline: 2px solid rgba(2, 111, 253, 0.24);
+  background: rgba(2, 111, 253, 0.24);
+  border-radius: 3px;
+  text-shadow: 1px 1px 5px;
+}
+
+.wicked-note-badge{
+  position:absolute;
+  left:-4px;
+  top:8px;
+  width:12px;
+  height:12px;
+  text-align: center;
+  line-height: 12px;
+  border: 1px solid green;
+  border-radius: 50%;
+  background:rgba(255, 255, 255, 0.342);
+  pointer-events:auto;
+  cursor: crosshair;
+  z-index:2;
+}
+
+.wicked-note-badge2 {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  right: 0%;
+  padding: 12px 16px;
+  transform: translate(0%, -50%);
+}
