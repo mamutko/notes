@@ -11,7 +11,7 @@ export interface Props {
 
 // Processes the note text to display an alternate text and returns the new note text and
 // a function to "unprocess" the text for storage in state.
-function Process(text: string): [string, ((text : string) => string)]
+function Process(text: string): [string, ((text : string) => string), number]
 {
     let lines = text.split('\n');
     let addendum = "";
@@ -33,13 +33,15 @@ function Process(text: string): [string, ((text : string) => string)]
         return text;
     }
 
-    return [text, Unprocess];
+    let followUpCount = [...addendum.matchAll(/#TODO/gi)].length;
+
+    return [text, Unprocess, followUpCount];
 }
 
 
 function WickedNote(props : Props) {
     
-    const [text, Unprocess] = Process(props.text);
+    const [text, Unprocess, followUpCount] = Process(props.text);
 
     function onEditorClick(e : any)
     {
@@ -62,9 +64,14 @@ function WickedNote(props : Props) {
     }
 
     return (
-        <div className="wicked-note" onClick={onEditorClick}>
+        <div className="wicked-note">
+        <div className="wicked-note-editor" onClick={onEditorClick}>
             <Editor value={text} highlight = {Highlight} preClassName={'wicked-note-enclosing-pre'}
         onValueChange={text => props.setText(Unprocess(text))} />
+        </div>
+        {followUpCount > 0 && (
+            <div className="wicked-note-follow-up">... {followUpCount} follow-up <span className='wicked-note-tag-todo'>#TODOs</span>.</div>
+        )}
         </div>
     );
 }

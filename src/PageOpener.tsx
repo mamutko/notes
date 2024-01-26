@@ -54,7 +54,15 @@ function PageOpener(props: Props)
 
     // TODO: Add a message about popup blocker. Add manual link to open page. Maybe even list history.
 
-    return (<p>Page opened.</p>);
+    return (<>
+        <p>Page opened: <a href={props.url}>{props.url}</a>.</p>
+        <p>If the page didn't open, check browser to enable pop-ups.</p>
+        <h1>Anchor Page</h1>
+        <p>The purpose of this page is to "anchor" where links from the notes page should be opened. You can
+            move this page to your preffered window and leave it open there. All subsequent clicks on links
+            will open in the same window.
+        </p>
+    </>);
 }
 
 export default PageOpener;

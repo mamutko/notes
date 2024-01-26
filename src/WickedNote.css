@@ -4,11 +4,22 @@
 }
 
 .wicked-note {
-    font-family: "Fira code", "Fira Mono", source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-    background:rgba(129, 129, 129, 0.226);
+    color:lightgray;
     margin:16px;
     padding: 0px;
     line-height: 20px;
+}
+
+.wicked-note-editor {
+  font-family: "Fira code", "Fira Mono", source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  background:rgba(129, 129, 129, 0.226);
+}
+
+.wicked-note-follow-up {
+  color:gray;
+  text-align: left;
+  font-size:12px;
+  cursor:default;
 }
 
 .npm__react-simple-code-editor__textarea {
@@ -40,6 +51,43 @@ pointer-events: var(--pre-pointer-events, auto) !important;
 .wicked-note-tag-done{
   color:lightseagreen;
 }
+
+.wicked-note-tag-green{
+  color: inherit;
+  background: darkgreen;
+}
+
+.wicked-note-editor:has(.wicked-note-heading .wicked-note-tag-green) {
+  background:rgba(0, 100, 0, 0.3);
+}
+
+.wicked-note-tag-red{
+  color: inherit;
+  background: darkred;
+}
+
+.wicked-note-editor:has(.wicked-note-heading .wicked-note-tag-red) {
+  background:rgba(100, 0, 0, 0.3);
+}
+
+.wicked-note-tag-blue{
+  color: inherit;
+  background: darkblue;
+}
+
+.wicked-note-editor:has(.wicked-note-heading .wicked-note-tag-blue) {
+  background:rgba(0, 0, 100, 0.3);
+}
+
+.wicked-note-tag-yellow{
+  color: inherit;
+  background: rgb(100, 100, 0);
+}
+
+.wicked-note-editor:has(.wicked-note-heading .wicked-note-tag-yellow) {
+  background:rgba(100, 100, 0, 0.3);
+}
+
 
 .wicked-note-mention{
     color:lightgreen;    

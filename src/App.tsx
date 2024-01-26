@@ -79,7 +79,7 @@ function App() {
 
   if (url)
   {
-    return (<PageOpener url={url}/>)
+    return (<PageOpener url={atob(url)}/>)
   }
 
 

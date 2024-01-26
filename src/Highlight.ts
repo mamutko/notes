@@ -1,6 +1,5 @@
 function Highlight(text : string) : string
 {
-    const activeTags = /(#\w+)/g;
 
     // const matches = [...text.matchAll(activeTags)];
     // let matchRanges = new Array<[number, number]>();
@@ -14,33 +13,38 @@ function Highlight(text : string) : string
     // Hash Tag
     // text = text.replaceAll(activeTags, '<span class="wicked-note-tag wicked-note-active-content" istart="" ilength="">$1</span>');
 
+    const activeTags = /(?<=^|\s|\n)(#\w+)/g;
     text = text.replaceAll(activeTags, (match, p1, offset, text, groups) => {
         let actionTag: string | undefined;
         let actionClass: string | undefined;
 
-        if (p1 === "#TODO")
+        let tag = p1.slice(1).toLowerCase();
+        let tagClass = `wicked-note-tag-${tag}`
+
+        if (tag === "todo")
         {
+            // TODO: Case preservation for #DONE below and #TODO further down.
             actionTag = "#DONE";
-            actionClass = "wicked-note-tag-todo";
         }
-        if (p1 === "#DONE")
+        if (tag === "done")
         {
             actionTag = "#TODO";
-            actionClass = "wicked-note-tag-done";
         }
 
         if (actionTag)
         {
-            return `<span class="wicked-note-tag wicked-note-active-content ${actionClass}" istart=${offset} ilength=${p1.length} iActionTag="${actionTag}">${p1}</span>`;
+            return `<span class="wicked-note-tag wicked-note-active-content ${tagClass}" istart=${offset} ilength=${p1.length} iActionTag="${actionTag}">${p1}</span>`;
         }
         else
         {
-            return `<span class="wicked-note-tag">${p1}</span>`;
+            return `<span class="wicked-note-tag ${tagClass}">${p1}</span>`;
         }
     });
 
     // Heading
-    text = text.replaceAll(/((^.*)\n|(^[^\n]*)$)/g, '<span class="wicked-note-heading">$2$3</span>\n');
+    //text = text.replaceAll(/((^.*)\n|(^[^\n]*)$)/g, '<span class="wicked-note-heading">$2$3</span>\n');
+    text = text.replaceAll(/^([^\n]*)\n/g, '<span class="wicked-note-heading">$1</span>\n');
+    text = text.replaceAll(/^([^\n]*)$/g, '<span class="wicked-note-heading">$1</span>');
 
  
     // At-mention
@@ -49,7 +53,17 @@ function Highlight(text : string) : string
     // Http link.
     // TODO: Remove hardcoded server address - the path depends on how the app is setup on GitHub pages.
     // TODO: encode URL as Base64.
-    text = text.replaceAll(/((http:\/\/|https:\/\/)[^\s]+)/g, '<a class="wicked-note-link wicked-note-active-content" href="#" onclick="window.open(\'https://mamutko.github.io/notes/?url=$1\',\'PageOpener\'); return false;">$1</a>');
+    // let urlRegex = /((http:\/\/|https:\/\/)[^\s]+)/g;
+
+    // Match strings stargint with http:// or https:// and terminated by space/end-of-line/end-of-string/</span>. The </span> is needed because
+    // some of the above replacements (heading replacement) can add a </span> to the end of the URL. TODO: refactor this, so that the different
+    // algos for replacements do not influence each other.
+    let urlRegex = /((http:\/\/|https:\/\/).+?)(?=\s|\n|$|<\/span>)/g;
+    text = text.replaceAll(urlRegex, (match, p1, offset, text, groups) => {
+        return `<a class="wicked-note-link wicked-note-active-content" href="?url=${btoa(p1)}" target="PageOpener">${p1}</a>`
+    });
+    
+    // '<a class="wicked-note-link wicked-note-active-content" href="#" onclick="window.open(\'https://mamutko.github.io/notes/?url=$1\',\'PageOpener\'); return false;">$1</a>');
 
     // Badge
     // text = text.replaceAll(/((http:\/\/|https:\/\/)[^\s]+)/g, '<span class="wicked-note-link" style="position:relative;"><div class="wicked-note-badge">&plus;</div>$1</a>');
