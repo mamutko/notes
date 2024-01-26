@@ -10,6 +10,8 @@ npx create-react-app wicked-notes --template typescript
 npm start 
 npm install react-simple-code-editor 
 
+npm install react-router-dom
+
 ### Deploy localy
 
 npm install -g serve
