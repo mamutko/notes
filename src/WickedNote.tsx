@@ -16,7 +16,7 @@ function Process(text: string): [string, ((text : string) => string), number]
     let lines = text.split('\n');
     let addendum = "";
 
-    if (lines[0].match(/(#DONE)/gi))
+    if (lines[0].match(/(#DONE|#WAIT)/gi))
     {
         text = lines[0];
         addendum = lines.slice(1).join('\n');

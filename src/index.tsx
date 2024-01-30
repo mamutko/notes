@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { HashRouter, Route, Routes } from 'react-router-dom';
+import PageOpener from './PageOpener';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -17,7 +19,12 @@ const root = ReactDOM.createRoot(
 // );
 
 root.render(
-  <div className='wicked-notes-app'><App /></div>
+  <HashRouter>
+    <Routes>
+      <Route path="/" element={<App/>}/>
+      <Route path="/open" element={<PageOpener/>}/>
+    </Routes>
+  </HashRouter>
 )
 ;
 // If you want to start measuring performance in your app, pass a function

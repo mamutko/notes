@@ -39,8 +39,13 @@ function App() {
 
       notegroup.noteKeyList.forEach((key) => {
         console.info(`key: ${key}, value: ${localStorage.getItem(key)}`);
-        const note: NoteState = JSON.parse(localStorage.getItem(key) || "");   
-        data[key] = note;
+        const keyValue = localStorage.getItem(key);
+
+        if (keyValue)
+        {
+          const note: NoteState = JSON.parse(keyValue);   
+          data[key] = note;
+        }
       });
     });
 
@@ -72,16 +77,6 @@ function App() {
       localStorage.setItem(key, JSON.stringify(value));
     }
   }
-
-  // TODO: move this out of App.tsxinto it's own component.
-  const searchParams = new URLSearchParams(window.location.search);
-  const url = searchParams.get('url');
-
-  if (url)
-  {
-    return (<PageOpener url={atob(url)}/>)
-  }
-
 
   return (
     <div className="App">

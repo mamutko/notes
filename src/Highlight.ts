@@ -13,6 +13,15 @@ function Highlight(text : string) : string
     // Hash Tag
     // text = text.replaceAll(activeTags, '<span class="wicked-note-tag wicked-note-active-content" istart="" ilength="">$1</span>');
 
+    let headingEndPosition = text.search("\n");
+
+    if (headingEndPosition == -1)
+    {
+        headingEndPosition = text.length;
+    }
+
+    let hasTodoInBody = false;
+
     const activeTags = /(?<=^|\s|\n)(#\w+)/g;
     text = text.replaceAll(activeTags, (match, p1, offset, text, groups) => {
         let actionTag: string | undefined;
@@ -24,9 +33,21 @@ function Highlight(text : string) : string
         if (tag === "todo")
         {
             // TODO: Case preservation for #DONE below and #TODO further down.
-            actionTag = "#DONE";
+            if (offset < headingEndPosition)
+            {
+                actionTag = "#WAIT";
+            }
+            else
+            {
+                actionTag = "#DONE";
+                hasTodoInBody = true;
+            }
         }
         if (tag === "done")
+        {
+            actionTag = "#TODO";
+        }
+        if (tag === "wait")
         {
             actionTag = "#TODO";
         }
@@ -40,6 +61,11 @@ function Highlight(text : string) : string
             return `<span class="wicked-note-tag ${tagClass}">${p1}</span>`;
         }
     });
+
+    if (!hasTodoInBody)
+    {
+        text = text.replaceAll('iActionTag="#WAIT"','iActionTag="#DONE"');
+    }
 
     // Heading
     //text = text.replaceAll(/((^.*)\n|(^[^\n]*)$)/g, '<span class="wicked-note-heading">$2$3</span>\n');
@@ -60,7 +86,7 @@ function Highlight(text : string) : string
     // algos for replacements do not influence each other.
     let urlRegex = /((http:\/\/|https:\/\/).+?)(?=\s|\n|$|<\/span>)/g;
     text = text.replaceAll(urlRegex, (match, p1, offset, text, groups) => {
-        return `<a class="wicked-note-link wicked-note-active-content" href="?url=${btoa(p1)}" target="PageOpener">${p1}</a>`
+        return `<a class="wicked-note-link wicked-note-active-content" href="/notes/#/open?url=${btoa(p1)}" target="PageOpener">${p1}</a>`
     });
     
     // '<a class="wicked-note-link wicked-note-active-content" href="#" onclick="window.open(\'https://mamutko.github.io/notes/?url=$1\',\'PageOpener\'); return false;">$1</a>');

@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
 // Normalize a value string for use in URL. This is very specific logic for specifically formatted data.
 //   - trim all spaces
@@ -28,34 +29,41 @@ function normalizeValue(value: string): string
 }
 
 export interface Props {
-    url: string;
+    // url: string;
 }
 
 function PageOpener(props: Props)
 {
-    useEffect(() => {
-        let url = props.url;
+    let [searchParams, setSearchParams] = useSearchParams();
 
-        if (url.match('{cb}') || url.match('{cbf}'))
+    const encodedUrl = searchParams.get('url') || "";
+    const url = atob(encodedUrl);
+
+    useEffect(() => {
+
+        if (!url)
+            return;
+
+     if (url.match('{cb}') || url.match('{cbf}'))
         {
             navigator.clipboard.readText().then((cb) => {
-                url = url.replace('{cb}',cb);
+                let urlNew = url.replace('{cb}',cb);
                 let cbf = normalizeValue(cb);
-                url = url.replace('{cbf}',cbf);
+                urlNew = urlNew.replace('{cbf}',cbf);
 
-                window.open(url, '_blank');
+                window.open(urlNew, '_blank');
             })
         }
         else
         {
             window.open(url, '_blank');
         }
-    }, []);
+    }, [searchParams]);
 
     // TODO: Add a message about popup blocker. Add manual link to open page. Maybe even list history.
 
     return (<>
-        <p>Page opened: <a href={props.url}>{props.url}</a>.</p>
+        <p>Page opened: <a href={url}>{url}</a>.</p>
         <p>If the page didn't open, check browser to enable pop-ups.</p>
         <h1>Anchor Page</h1>
         <p>The purpose of this page is to "anchor" where links from the notes page should be opened. You can

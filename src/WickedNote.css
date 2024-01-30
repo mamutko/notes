@@ -44,6 +44,10 @@ pointer-events: var(--pre-pointer-events, auto) !important;
     color:burlywood;    
 }
 
+.wicked-note-tag-wait{
+  color:rgb(255, 0, 149);
+}
+
 .wicked-note-tag-todo{
   color:orange;
 }
