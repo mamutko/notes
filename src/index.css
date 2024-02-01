@@ -13,3 +13,20 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+button, input[type="file"] {
+  border: 2px solid rgba(2, 111, 253, 0.10);
+  background: rgba(2, 111, 253, 0.10);
+  color:lightgray;
+  border-radius: 4px;
+  position: relative;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+button:hover, input[type="file"]:hover{
+  border: 2px solid rgba(2, 111, 253, 0.24);
+  background: rgba(2, 111, 253, 0.24);
+  border-radius: 4px;
+  text-shadow: 1px 1px 4px;
+}

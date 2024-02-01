@@ -81,7 +81,8 @@ function App() {
   return (
     <div className="App">
       <button onClick={writeFile}>Write File</button>
-      <input type="file" onChange={(e) => { if (e.target.files) loadFile(e.target.files[0]);}}/>
+      <button onClick={() => document.getElementById("loadFileInput")?.click()}>Load File</button>
+      <input id="loadFileInput" type="file" style={{"visibility": "hidden"}} onChange={(e) => { if (e.target.files) loadFile(e.target.files[0]);}}/>
       <InputToggle>
         <PersistentNotebook storageKey={NOTEBOOK_KEY} />
       </InputToggle>
