@@ -43,3 +43,10 @@
     width: 100px;
 }
 
+.note-group-collapsed-body {
+    color:gray;
+    text-align: left;
+    font-size:12px;
+    cursor:default;
+  }
+

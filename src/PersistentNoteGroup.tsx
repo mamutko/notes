@@ -98,6 +98,9 @@ function PersistentNoteGroup(props: Props) {
           {props.allowAddNote && <button className='note-group-add-note-button' onClick={onAddNote}>Add Note</button>}
         </div>
       </>)}
+      {state.collapsed && (
+            <div className="note-group-collapsed-body">... {state.noteKeyList.length} notes. <button onClick={onToggleCollapse}>Expand</button></div>
+        )}
     </div>
     );
   }
