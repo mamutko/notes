@@ -64,7 +64,7 @@ function PersistentNotebook(props: Props) {
 
     return (<div className={'note-book'}>
     {state.noteGroupList.map((noteKey: string, index: number) => (
-        <PersistentNoteGroup key={noteKey} storageKey={noteKey} allowAddNote={index == lastIndex}/>
+        <PersistentNoteGroup key={noteKey} storageKey={noteKey} allowAddNote={index == lastIndex || true}/>
     ))}
     {
       // <button onClick={onAddNoteGroup}>Add NoteGroup</button>

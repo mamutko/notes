@@ -1,0 +1,27 @@
+.note-group {
+
+}
+
+.note-group-header {
+    display: flex;
+    margin: 16px;
+    height: 24px;
+    padding: 4px;
+    background: rgba(139, 0, 0, 0.5);
+}
+
+.note-group-description {
+    flex: auto;
+    text-align: left;
+    display: flex;
+    align-items: center;
+}
+
+.note-group-description-text {
+
+}
+
+.note-group-collapse-button {
+
+}
+

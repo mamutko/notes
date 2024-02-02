@@ -1,6 +1,7 @@
 import { Key } from "react";
 import PersistentNote from "./PersistentNote";
 import usePersistentState, { initializePersistentState } from "./PersistentState";
+import "./PersistentNoteGroup.css"
 
 export interface Props {
   storageKey : string;
@@ -40,6 +41,11 @@ function PersistentNoteGroup(props: Props) {
       newState.collapsed = state.collapsed;
       newState.nextNoteId = state.nextNoteId + 1;
       newState.noteKeyList = [...state.noteKeyList, `${props.storageKey}-note-v0-element${state.nextNoteId}`]
+      newState.description = state.description;
+      newState.dateStart = state.dateStart;
+      newState.dateEnd = state.dateEnd;
+
+      // TODO: use some kind of 'clone' on state so that we don't have to copy all fields manually.
 
       setState(newState);
     }
@@ -55,11 +61,11 @@ function PersistentNoteGroup(props: Props) {
 
     function getDescription()
     {
-      let description = "";
+      let description = "Note Group";
 
       if (state.dateStart)
       {
-        description = description + state.dateStart.toDateString() + " - " + state.dateEnd?.toDateString();
+        description = description + " " + state.dateStart.toDateString() + " - " + state.dateEnd?.toDateString();
       }
 
       if (state.description)
@@ -67,26 +73,32 @@ function PersistentNoteGroup(props: Props) {
         description = description + " " + state.description;
       }
 
+      if (!description)
+      {
+        description = `${state.noteKeyList.length} notes`
+      }
+
       return description;
     }
   
-    if (state.collapsed) {
-      return (<>
-        <button onClick={onToggleCollapse}>Expand</button>
-      </>
-      );
-    }
-    else {
-      return (<div className={'note-group'} style={{borderBottom: '2px solid green', padding:'4px'}}>
-        <button onClick={onToggleCollapse}>Collapse</button>
-        <div>{getDescription()}</div>
+    return (
+    <div className='note-group'>
+      <div className='note-group-header'>
+        <div className='note-group-description'>
+        <div className='note-group-description-text'>{getDescription()}</div>
+        </div>
+        <button className='note-group-collapse-button' onClick={onToggleCollapse}>{state.collapsed ? "Expand" : "Collapse"}</button>
+      </div>
+      {!state.collapsed && (<>
         {state.noteKeyList.map((noteKey: string) => (
           <PersistentNote key={noteKey} storageKey={noteKey} />
         ))}
-        {props.allowAddNote && <button onClick={onAddNote}>Add Note</button>}
-      </div>
-      );
-    }
+        <div className='note-group-footer'>
+          {props.allowAddNote && <button onClick={onAddNote}>Add Note</button>}
+        </div>
+      </>)}
+    </div>
+    );
   }
 
   export default PersistentNoteGroup;
