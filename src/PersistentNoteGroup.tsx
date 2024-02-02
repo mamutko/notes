@@ -94,7 +94,8 @@ function PersistentNoteGroup(props: Props) {
           <PersistentNote key={noteKey} storageKey={noteKey} />
         ))}
         <div className='note-group-footer'>
-          {props.allowAddNote && <button onClick={onAddNote}>Add Note</button>}
+          <div className='note-group-footer-content'></div>
+          {props.allowAddNote && <button className='note-group-add-note-button' onClick={onAddNote}>Add Note</button>}
         </div>
       </>)}
     </div>

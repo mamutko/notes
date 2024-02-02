@@ -21,7 +21,25 @@
 
 }
 
-.note-group-collapse-button {
+.note-group-footer {
+    display: flex;
+    margin: 16px;
+    height: 24px;
+    padding: 4px;
+}
 
+.note-group-footer-content {
+    flex: auto;
+    text-align: left;
+    display: flex;
+    align-items: center;
+}
+
+.note-group-collapse-button {
+    width: 100px;
+}
+
+.note-group-add-note-button {
+    width: 100px;
 }
 
