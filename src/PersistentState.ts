@@ -11,7 +11,7 @@ export interface Serializable {
 
 // replacer/reviver from: https://stackoverflow.com/questions/29085197/how-do-you-json-stringify-an-es6-map
 
-function replacer(key, value) {
+function replacer(key: string, value: any) {
   if(value instanceof Map) {
     return {
       dataType: 'Map',
@@ -22,7 +22,7 @@ function replacer(key, value) {
   }
 }
 
-function reviver(key, value) {
+function reviver(key: string, value: any) {
   if(typeof value === 'object' && value !== null) {
     if (value.dataType === 'Map') {
       return new Map(value.value);

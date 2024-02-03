@@ -69,6 +69,9 @@ function PersistentNotebook(props: Props) {
       createPersistentNote(addLabel);
     }
 
+    console.log("INITIAL STATEL");
+    console.log(state);
+
     return (<div className={'note-book'}>
       {Array.from(state.labelToNotes).map(([label, notes]) => (
         <NoteGroup description={label} noteKeyList={notes} collapsed={false} setCollapsed={() => {}} onAddLabel={addLabel} onRemoveLabel={removeLabel}/>
