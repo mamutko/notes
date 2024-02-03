@@ -33,14 +33,22 @@ export class State implements Serializable{
 
 }
 
-export function createPersistentNote()
+export function createPersistentNote(onAddLabel: (noteKey: string, label: string) => void)
 {
     const state = new State("");
 
     // We will identify each note by it's creation time.
-    const key = `note_v1_${state.created.toString()}`;
+    const key = `note_v1_${state.created.getTime().toString()}`;
 
     initializePersistentState(key, state);
+
+    const labels = GetLabels(state.text, state.created, state.modified);
+
+    for (const label of labels)
+    {
+        onAddLabel(key, label);
+    }
+
     return key;
 }
 

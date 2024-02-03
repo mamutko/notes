@@ -1,8 +1,9 @@
 import { Key } from "react";
-import PersistentNote from "./PersistentNote";
+import PersistentNote, { createPersistentNote } from "./PersistentNote";
 import usePersistentState, { Serializable } from "./PersistentState";
-import PersistentNoteGroup, { createNoteGroup } from "./PersistentNoteGroup";
+//import PersistentNoteGroup, { createNoteGroup } from "./PersistentNoteGroup";
 import './PersistentNotebook.css';
+import NoteGroup from "./NoteGroup";
 
 
 export interface Props {
@@ -10,7 +11,10 @@ export interface Props {
 }
 
 export class State implements Serializable {
-  fixUpDates() {}
+  fixUpDates() {
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!")
+    this.labelToNotes = new Map<string, string[]>(Object.entries(this.labelToNotes));
+  }
   labelToNotes = new Map<string,string[]>();
 }
 
@@ -34,6 +38,49 @@ function thisMonday()
 
 function PersistentNotebook(props: Props) {
     const [state, setState] = usePersistentState(props.storageKey, new State())
+
+    function addLabel(noteKey: string, label: string)
+    {
+      let newState = new State();
+      // TODO: deep copy?
+      newState.labelToNotes = state.labelToNotes;
+      newState.labelToNotes.set(label, [...newState.labelToNotes.get(label) ?? [], noteKey]);
+
+      console.log(newState);
+
+      console.log("SET STATE");
+      console.log(newState);
+
+      setState(newState);
+    }
+
+    function removeLabel(noteKey: string, label: string,)
+    {
+      let newState = new State();
+      // TODO: deep copy?
+      newState.labelToNotes = state.labelToNotes;
+      newState.labelToNotes.set(label, (newState.labelToNotes.get(label) ?? []).filter(x => x != noteKey));
+
+      setState(newState);
+    }
+
+    function addNote()
+    {
+      createPersistentNote(addLabel);
+    }
+
+    return (<div className={'note-book'}>
+      {Array.from(state.labelToNotes).map(([label, notes]) => (
+        <NoteGroup description={label} noteKeyList={notes} collapsed={false} setCollapsed={() => {}} onAddLabel={addLabel} onRemoveLabel={removeLabel}/>
+      ))}
+
+      <button onClick={addNote}>Add Note</button>
+
+    </div>);
+  
+
+
+    return <></>;
 
     // TODO: remove
     // function addNoteGroup() {
@@ -62,17 +109,17 @@ function PersistentNotebook(props: Props) {
 
     // const lastIndex = state.noteGroupList.length - 1;
 
-    [...state.labelToNotes: any.entries()].map((x: any) => x);
+    // [...state.labelToNotes: any.entries()].map((x: any) => x);
 
-    return (<div className={'note-book'}>
-    {[...state.labelToNotes.entries()].map(([label: string, notes: string[]]) => (
-        <NoteGroup description="" }/>
-    ))}
-    {
-      // <button onClick={onAddNoteGroup}>Add NoteGroup</button>
-    }
-    </div>
-    );
+    // return (<div className={'note-book'}>
+    // {[...state.labelToNotes.entries()].map(([label: string, notes: string[]]) => (
+    //     <NoteGroup description="" }/>
+    // ))}
+    // {
+    //   // <button onClick={onAddNoteGroup}>Add NoteGroup</button>
+    // }
+    // </div>
+    // );
     
   }
 

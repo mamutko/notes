@@ -5,8 +5,8 @@ import "./PersistentNoteGroup.css"
 
 export interface Props {
   description: string;
-  dateStart: Date | undefined;
-  dateEnd: Date | undefined;
+  dateStart?: Date | undefined;
+  dateEnd?: Date | undefined;
   noteKeyList: string[];
   collapsed: boolean;
   setCollapsed: (collapsed: boolean) => void;
@@ -65,5 +65,5 @@ function NoteGroup(props: Props) {
   // {props.allowAddNote && <button className='note-group-add-note-button' onClick={onAddNote}>Add Note</button>}
   // </div>
 
-  export default PersistentNoteGroup;
+  export default NoteGroup;
   

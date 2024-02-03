@@ -3,12 +3,12 @@ import './App.css';
 import WickedNote from './WickedNote';
 import InputToggle from './InputToggle';
 import PersistentNote, { State as NoteState } from './PersistentNote';
-import PersistentNoteGroup, { State as NoteGroupState } from './PersistentNoteGroup';
+//import PersistentNoteGroup, { State as NoteGroupState } from './PersistentNoteGroup';
 import PersistentNotebook, { State as NotebookState} from './PersistentNotebook';
 import PageOpener from './PageOpener';
 
 
-const NOTEBOOK_KEY:string = "notebook_v1"
+const NOTEBOOK_KEY:string = "notebook_v2"
 
 function downloadObject<T>(fileName: string, object: T)
 {
@@ -26,29 +26,30 @@ function App() {
   // TODO: move this out of App.tsx into it's own component.
   function writeFile() {
 
-    let data: any = {};
+    // TODO: NOW fix!
+    // let data: any = {};
 
-    const notebook: NotebookState = JSON.parse(localStorage.getItem(NOTEBOOK_KEY) || "");
+    // const notebook: NotebookState = JSON.parse(localStorage.getItem(NOTEBOOK_KEY) || "");
 
-    data[NOTEBOOK_KEY] = notebook;
+    // data[NOTEBOOK_KEY] = notebook;
 
-    notebook.noteGroupList.forEach((key) => {
-      const notegroup: NoteGroupState = JSON.parse(localStorage.getItem(key) || "");   
-      data[key] = notegroup;
+    // notebook.noteGroupList.forEach((key) => {
+    //   const notegroup: NoteGroupState = JSON.parse(localStorage.getItem(key) || "");   
+    //   data[key] = notegroup;
 
-      notegroup.noteKeyList.forEach((key) => {
-        console.info(`key: ${key}, value: ${localStorage.getItem(key)}`);
-        const keyValue = localStorage.getItem(key);
+    //   notegroup.noteKeyList.forEach((key) => {
+    //     console.info(`key: ${key}, value: ${localStorage.getItem(key)}`);
+    //     const keyValue = localStorage.getItem(key);
 
-        if (keyValue)
-        {
-          const note: NoteState = JSON.parse(keyValue);   
-          data[key] = note;
-        }
-      });
-    });
+    //     if (keyValue)
+    //     {
+    //       const note: NoteState = JSON.parse(keyValue);   
+    //       data[key] = note;
+    //     }
+    //   });
+    // });
 
-    downloadObject('data.json', data);
+    // downloadObject('data.json', data);
   }
 
   function loadFile(file: File)
