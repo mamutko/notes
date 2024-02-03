@@ -8,7 +8,7 @@ import PersistentNotebook, { State as NotebookState} from './PersistentNotebook'
 import PageOpener from './PageOpener';
 
 
-const NOTEBOOK_KEY:string = "pnbv1"
+const NOTEBOOK_KEY:string = "notebook_v1"
 
 function downloadObject<T>(fileName: string, object: T)
 {

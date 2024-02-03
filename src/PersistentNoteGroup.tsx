@@ -1,6 +1,6 @@
 import { Key } from "react";
 import PersistentNote from "./PersistentNote";
-import usePersistentState, { initializePersistentState } from "./PersistentState";
+import usePersistentState, { Serializable, initializePersistentState } from "./PersistentState";
 import "./PersistentNoteGroup.css"
 
 export interface Props {
@@ -8,12 +8,19 @@ export interface Props {
   allowAddNote : boolean;
 }
 
-export class State {
+export class State implements Serializable{
+
+  fixUpDates()
+  {
+    if (this.dateStart)
+      this.dateStart = new Date(this.dateStart);
+    if (this.dateEnd)
+      this.dateEnd = new Date(this.dateEnd);
+  }
+
   description: string = "";
   dateStart: Date | undefined;
   dateEnd: Date | undefined;
-  collapsed: boolean = false;
-  nextNoteId: number = 0;
   noteKeyList: string[] = [];
 }
 
@@ -29,13 +36,6 @@ export function createNoteGroup(storagKey: string, description: string, dateStar
 function PersistentNoteGroup(props: Props) {
     const [state, setState] = usePersistentState(props.storageKey, new State())
   
-    // TODO: HACK - dates don't deserialize as dates, fix
-    if (state.dateStart)
-      state.dateStart = new Date(state.dateStart);
-    if (state.dateEnd)
-      state.dateEnd = new Date(state.dateEnd);
-  
-
     function onAddNote() {
       let newState = new State()
       newState.collapsed = state.collapsed;

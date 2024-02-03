@@ -111,4 +111,9 @@ function Highlight(text : string) : string
     return text;
 }
 
+export function GetLabels(text: string, created: Date, modified: Date): string[]
+{
+    return ['all'];
+}
+
 export default Highlight;
