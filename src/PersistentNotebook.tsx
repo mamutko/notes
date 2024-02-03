@@ -13,7 +13,7 @@ export interface Props {
 export class State implements Serializable {
   fixUpDates() {
     console.log("!!!!!!!!!!!!!!!!!!!!!!!!!")
-    this.labelToNotes = new Map<string, string[]>(Object.entries(this.labelToNotes));
+    // this.labelToNotes = new Map<string, string[]>(Object.entries(this.labelToNotes));
   }
   labelToNotes = new Map<string,string[]>();
 }
