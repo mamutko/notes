@@ -2,20 +2,21 @@ import React, { useState } from 'react';
 import './App.css';
 import WickedNote from './WickedNote';
 import InputToggle from './InputToggle';
-import PersistentNote, { State as NoteState } from './PersistentNote';
+import PersistentNote, { State as NoteState, createPersistentNote } from './PersistentNote';
 //import PersistentNoteGroup, { State as NoteGroupState } from './PersistentNoteGroup';
 import PersistentNotebook, { State as NotebookState} from './PersistentNotebook';
 import PageOpener from './PageOpener';
+import { wnParse, wnStringify } from './PersistentState';
 
 
-const NOTEBOOK_KEY:string = "notebook_v3"
+const NOTEBOOK_KEY:string = "notebook_v5"
 
 function downloadObject<T>(fileName: string, object: T)
 {
   // Based on: https://stackoverflow.com/questions/66078335/how-do-i-save-a-file-on-my-desktop-using-reactjs
   const a = document.createElement('a');
   a.download = fileName;
-  const blob = new Blob([JSON.stringify(object, null, 2)], {type : 'application/json'});
+  const blob = new Blob([wnStringify(object)], {type : 'application/json'});
   a.href = URL.createObjectURL(blob)
   a.addEventListener('click', (e) => {setTimeout(() => URL.revokeObjectURL(a.href), 30 * 1000)});
   a.click();
@@ -26,19 +27,36 @@ function App() {
   // TODO: move this out of App.tsx into it's own component.
   function writeFile() {
 
-    // let data: any = {};
+    let data: any = {};
 
-    // const notebook: NotebookState = JSON.parse(localStorage.getItem(NOTEBOOK_KEY) || "");
+    console.log("WRITE FILE");
+    const notebookJson = localStorage.getItem(NOTEBOOK_KEY) || "";
+    console.log(notebookJson);
+    const notebook: NotebookState = wnParse(notebookJson);
+    console.log(notebook);
 
-    // data[NOTEBOOK_KEY] = notebook;
+    data[NOTEBOOK_KEY] = notebook;
 
-    // let noteKeyList = new Set<string>();
+    let noteKeyList = new Set<string>();
 
-    // for (const [label, notes] of notebook.labelToNotes)
-    // {
-    //   const noteSet = new Set<string>(notes);
-    //   noteKeyList = noteKeyList.(noteSet);
-    // }
+    for (const [label, notes] of notebook.labelToNotes)
+    {
+      console.log('Notes')
+      console.log(...notes);
+      console.log("List")
+      console.log(noteKeyList);
+      noteKeyList = new Set([...noteKeyList, ...notes]);
+    }
+
+    console.log(noteKeyList);
+
+    for (const noteKey of noteKeyList)
+    {
+      const note: NoteState = wnParse(localStorage.getItem(noteKey) || "");
+      data[noteKey] = note;
+    }
+
+    downloadObject('notes.json', data); 
 
     // notebook.noteGroupList.forEach((key) => {
     //   const notegroup: NoteGroupState = JSON.parse(localStorage.getItem(key) || "");   
@@ -57,6 +75,8 @@ function App() {
     // });
 
     // downloadObject('data.json', data);
+
+
   }
 
   function loadFile(file: File)
@@ -69,8 +89,16 @@ function App() {
       if (e.target)
       {
         var contentString = e.target.result as string;
-        let content = JSON.parse(contentString);
-        loadContent(content);
+        let content = wnParse(contentString);
+        if (/data/.test(file.name))
+        {
+          // TODO: remove
+          loadContentLegacy(content);
+        }
+        else
+        {
+          loadContent(content);
+        }
       }
     };
 
@@ -81,8 +109,49 @@ function App() {
   {
     for (let [key, value] of Object.entries(content))
     {
-      localStorage.setItem(key, JSON.stringify(value));
+      localStorage.setItem(key, wnStringify(value));
     }
+
+
+  }
+
+  function loadContentLegacy(content: any)
+  {
+    console.log('LOAD CONTENT LEGACY')
+    // Import legacy JSON
+    const notebook: NotebookState = new NotebookState();
+
+    function addLabel(noteKey: string, label: string)
+    {
+      console.log(`addLabel - key:${noteKey}, label:${label}`)
+
+      if ((notebook.labelToNotes.get(label) ?? []).includes(label))
+      {
+        // Note already present in label, nothing to do.
+        return;
+      }
+
+      notebook.labelToNotes.set(label, [...notebook.labelToNotes.get(label) ?? [], noteKey]);
+    }
+
+    for (let [key, value] of Object.entries(content))
+    {
+      if (/-element-note-/.test(key))
+      {
+        console.log("NOTE");
+        console.log(key);
+        console.log(value);
+        const o = value as {text:string, created:Date, modified:Date};
+        let state = new NoteState("");
+        state.text = o.text;
+        state.created = o.created;
+        state.modified = o.modified;
+        createPersistentNote(addLabel, state)
+      }
+      localStorage.setItem(key, wnStringify(value));
+    }
+
+    localStorage.setItem(NOTEBOOK_KEY, wnStringify(notebook));
   }
 
   return (

@@ -38,6 +38,13 @@ function PersistentNotebook(props: Props) {
     function addLabel(noteKey: string, label: string)
     {
       console.log(`addLabel - key:${noteKey}, label:${label}`)
+
+      if ((state.labelToNotes.get(label) ?? []).includes(label))
+      {
+        // Note already present in label, nothing to do.
+        return;
+      }
+
       let newState = new State();
       // TODO: deep copy?
       newState.labelToNotes = state.labelToNotes;

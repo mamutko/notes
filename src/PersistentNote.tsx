@@ -27,17 +27,15 @@ export class State {
 
 }
 
-export function createPersistentNote(onAddLabel: (noteKey: string, label: string) => void)
+export function createPersistentNote(onAddLabel: (noteKey: string, label: string) => void, initialState: State = new State(""))
 {
-    const state = new State("");
-
     // We will identify each note by it's creation time.
-    const key = `note_v1_${state.created.getTime().toString()}`;
-    state.labels = GetLabels(state.text, state.created, state.modified);
+    const key = `note_v1_${initialState.created.getTime().toString()}`;
+    initialState.labels = GetLabels(initialState.text, initialState.created, initialState.modified);
 
-    initializePersistentState(key, state);
+    initializePersistentState(key, initialState);
 
-    for (const label of state.labels)
+    for (const label of initialState.labels)
     {
         onAddLabel(key, label);
     }

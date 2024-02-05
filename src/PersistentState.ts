@@ -1,7 +1,18 @@
 import React from "react";
 
+export function wnStringify(value: any): string
+{
+  return JSON.stringify(value, replacer);
+}
+
+export function wnParse(value: string): any
+{
+  console.log("Parse: " + value);
+  return JSON.parse(value, reviver);
+}
+
 export function initializePersistentState<T>(key: string, initialState: T) {
-  const stringValue = JSON.stringify(initialState);
+  const stringValue = wnStringify(initialState);
   localStorage.setItem(key, stringValue);
 }
 
@@ -37,12 +48,15 @@ function usePersistentState<T>(key: string, initialValue: T):[T, (value: T) => v
   
     console.log(`localStore - getItem(${key}) -> ${storedValue}`)
 
-    let storedObject: T = (storedValue === null ? initialValue : JSON.parse(storedValue, reviver));
+    let storedObject: T = (storedValue === null ? initialValue : wnParse(storedValue));
+
+    console.log('localStore - getItem - retrieved object:');
+    console.log(storedObject);
   
     const [value, setValue] = React.useState(storedObject)
   
     function setAndPersistValue(value: T) {
-      const stringValue = JSON.stringify(value, replacer);
+      const stringValue = wnStringify(value);
       localStorage.setItem(key, stringValue);
       console.log(`localStore - setItem(${key}, ${stringValue})`)
       setValue(value);
