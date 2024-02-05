@@ -8,7 +8,7 @@ import PersistentNotebook, { State as NotebookState} from './PersistentNotebook'
 import PageOpener from './PageOpener';
 
 
-const NOTEBOOK_KEY:string = "notebook_v2"
+const NOTEBOOK_KEY:string = "notebook_v3"
 
 function downloadObject<T>(fileName: string, object: T)
 {
@@ -26,12 +26,19 @@ function App() {
   // TODO: move this out of App.tsx into it's own component.
   function writeFile() {
 
-    // TODO: NOW fix!
     // let data: any = {};
 
     // const notebook: NotebookState = JSON.parse(localStorage.getItem(NOTEBOOK_KEY) || "");
 
     // data[NOTEBOOK_KEY] = notebook;
+
+    // let noteKeyList = new Set<string>();
+
+    // for (const [label, notes] of notebook.labelToNotes)
+    // {
+    //   const noteSet = new Set<string>(notes);
+    //   noteKeyList = noteKeyList.(noteSet);
+    // }
 
     // notebook.noteGroupList.forEach((key) => {
     //   const notegroup: NoteGroupState = JSON.parse(localStorage.getItem(key) || "");   

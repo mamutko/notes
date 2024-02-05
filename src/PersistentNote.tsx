@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Editor from 'react-simple-code-editor'
 import './WickedNote.css';
 import Highlight, { GetLabels } from './Highlight';
-import usePersistentState, { Serializable, initializePersistentState } from './PersistentState';
+import usePersistentState, { initializePersistentState } from './PersistentState';
 import WickedNote from './WickedNote';
 
 export interface Props {
@@ -11,19 +11,13 @@ export interface Props {
     onRemoveLabel: (noteKey: string, label: string) => void;
 }
 
-export class State implements Serializable{
+export class State {
     constructor(text: string)
     {
         this.text = text;
         this.labels = new Array<string>()
         this.created = new Date();
         this.modified = new Date();
-    }
-
-    fixUpDates()
-    {
-        this.created = new Date(this.created);
-        this.modified = new Date(this.modified);
     }
 
     text: string;
@@ -39,12 +33,11 @@ export function createPersistentNote(onAddLabel: (noteKey: string, label: string
 
     // We will identify each note by it's creation time.
     const key = `note_v1_${state.created.getTime().toString()}`;
+    state.labels = GetLabels(state.text, state.created, state.modified);
 
     initializePersistentState(key, state);
 
-    const labels = GetLabels(state.text, state.created, state.modified);
-
-    for (const label of labels)
+    for (const label of state.labels)
     {
         onAddLabel(key, label);
     }
@@ -75,12 +68,12 @@ function PersistentNote(props : Props) {
 
         setState(newState);
 
-        for (let label in newLabels)
+        for (let label of newLabels)
         {
             props.onAddLabel(props.storageKey, label);
         }
 
-        for (let label in removedLabels)
+        for (let label of removedLabels)
         {
             props.onRemoveLabel(props.storageKey, label);
         }

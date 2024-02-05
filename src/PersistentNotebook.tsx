@@ -1,6 +1,6 @@
 import { Key } from "react";
 import PersistentNote, { createPersistentNote } from "./PersistentNote";
-import usePersistentState, { Serializable } from "./PersistentState";
+import usePersistentState from "./PersistentState";
 //import PersistentNoteGroup, { createNoteGroup } from "./PersistentNoteGroup";
 import './PersistentNotebook.css';
 import NoteGroup from "./NoteGroup";
@@ -10,11 +10,7 @@ export interface Props {
   storageKey : string;
 }
 
-export class State implements Serializable {
-  fixUpDates() {
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!")
-    // this.labelToNotes = new Map<string, string[]>(Object.entries(this.labelToNotes));
-  }
+export class State {
   labelToNotes = new Map<string,string[]>();
 }
 
@@ -41,6 +37,7 @@ function PersistentNotebook(props: Props) {
 
     function addLabel(noteKey: string, label: string)
     {
+      console.log(`addLabel - key:${noteKey}, label:${label}`)
       let newState = new State();
       // TODO: deep copy?
       newState.labelToNotes = state.labelToNotes;

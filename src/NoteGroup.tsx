@@ -1,6 +1,6 @@
 import { Key } from "react";
 import PersistentNote from "./PersistentNote";
-import usePersistentState, { Serializable, initializePersistentState } from "./PersistentState";
+import usePersistentState, { initializePersistentState } from "./PersistentState";
 import "./PersistentNoteGroup.css"
 
 export interface Props {

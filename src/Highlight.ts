@@ -113,7 +113,14 @@ function Highlight(text : string) : string
 
 export function GetLabels(text: string, created: Date, modified: Date): string[]
 {
-    return ['all'];
+    let labels = ['all'];
+
+    if (text.indexOf("#FAV") >= 0)
+    {
+        labels.push('#FAV');
+    }
+
+    return labels;
 }
 
 export default Highlight;
