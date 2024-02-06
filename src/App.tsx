@@ -25,7 +25,7 @@ function downloadObject<T>(fileName: string, object: T)
 function App() {  
 
   // TODO: move this out of App.tsx into it's own component.
-  function writeFile() {
+  function writeFile(filename: string) {
 
     let data: any = {};
 
@@ -56,7 +56,7 @@ function App() {
       data[noteKey] = note;
     }
 
-    downloadObject('notes.json', data); 
+    downloadObject(filename, data); 
 
     // notebook.noteGroupList.forEach((key) => {
     //   const notegroup: NoteGroupState = JSON.parse(localStorage.getItem(key) || "");   
@@ -82,7 +82,7 @@ function App() {
   function loadFile(file: File)
   {
     // Backup current data first.
-    writeFile();
+    writeFile('backup.json');
 
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -156,7 +156,7 @@ function App() {
 
   return (
     <div className="App">
-      <button onClick={writeFile}>Write File</button>
+      <button onClick={() => writeFile('notes.json')}>Write File</button>
       <button onClick={() => document.getElementById("loadFileInput")?.click()}>Load File</button>
       <input id="loadFileInput" type="file" style={{"visibility": "hidden"}} onChange={(e) => { if (e.target.files) loadFile(e.target.files[0]);}}/>
       <InputToggle>
