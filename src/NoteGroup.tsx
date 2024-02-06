@@ -18,7 +18,7 @@ function NoteGroup(props: Props) {
 
     function getDescription()
     {
-      let description = "Note Group";
+      let description = "";
 
       if (props.dateStart)
       {
