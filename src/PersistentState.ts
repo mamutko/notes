@@ -7,7 +7,7 @@ export function wnStringify(value: any): string
 
 export function wnParse(value: string): any
 {
-  console.log("Parse: " + value);
+  //console.log("Parse: " + value);
   return JSON.parse(value, reviver);
 }
 
@@ -46,19 +46,19 @@ function reviver(key: string, value: any) {
 function usePersistentState<T>(key: string, initialValue: T):[T, (value: T) => void] {
     const storedValue = localStorage.getItem(key)
   
-    console.log(`localStore - getItem(${key}) -> ${storedValue}`)
+    //console.log(`localStore - getItem(${key}) -> ${storedValue}`)
 
     let storedObject: T = (storedValue === null ? initialValue : wnParse(storedValue));
 
-    console.log('localStore - getItem - retrieved object:');
-    console.log(storedObject);
+    //console.log('localStore - getItem - retrieved object:');
+    //console.log(storedObject);
   
     const [value, setValue] = React.useState(storedObject)
   
     function setAndPersistValue(value: T) {
       const stringValue = wnStringify(value);
       localStorage.setItem(key, stringValue);
-      console.log(`localStore - setItem(${key}, ${stringValue})`)
+      //console.log(`localStore - setItem(${key}, ${stringValue})`)
       setValue(value);
     }
   

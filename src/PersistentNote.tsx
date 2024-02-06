@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Editor from 'react-simple-code-editor'
 import './WickedNote.css';
 import Highlight, { GetLabels } from './Highlight';
@@ -64,6 +64,11 @@ function PersistentNote(props : Props) {
         let newLabels = newState.labels.filter(label => !state.labels.includes(label));
         let removedLabels = state.labels.filter(label => !newState.labels.includes(label));
 
+        if (state.text == newState.text && !newLabels && !removedLabels)
+        {
+            return;
+        }
+
         setState(newState);
 
         for (let label of newLabels)
@@ -76,6 +81,10 @@ function PersistentNote(props : Props) {
             props.onRemoveLabel(props.storageKey, label);
         }
     }
+
+    // TODO: not necessary to do this on each render. The labels should be up to date unless
+    // we changed how labels are parsed out of the text.
+    useEffect(() => onSetText(state.text), []);
     
     // TODO: Consider removing timestamp-container?
     return <>

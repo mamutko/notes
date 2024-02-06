@@ -1,3 +1,5 @@
+import { getWeekDescription } from "./DateUtils";
+
 function Highlight(text : string) : string
 {
 
@@ -113,12 +115,30 @@ function Highlight(text : string) : string
 
 export function GetLabels(text: string, created: Date, modified: Date): string[]
 {
-    let labels = ['all'];
+    let labels = new Array<string>();
+
+    console.log(created);
+    labels.push(getWeekDescription(created))
+    console.log(created);
+
 
     if (text.indexOf("#FAV") >= 0)
     {
         labels.push('#FAV');
     }
+
+    if (text.indexOf("#TODO") >= 0)
+    {
+        labels.push('#TODO');
+    }
+
+    if (text.indexOf("#HEY") >= 0)
+    {
+        labels.push('#HEY');
+    }
+
+    console.log(`Labels: ${labels} for date ${created}.`);
+
 
     return labels;
 }

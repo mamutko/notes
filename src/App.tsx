@@ -9,7 +9,7 @@ import PageOpener from './PageOpener';
 import { wnParse, wnStringify } from './PersistentState';
 
 
-const NOTEBOOK_KEY:string = "notebook_v5"
+const NOTEBOOK_KEY:string = "notebook_v12"
 
 function downloadObject<T>(fileName: string, object: T)
 {
@@ -29,11 +29,11 @@ function App() {
 
     let data: any = {};
 
-    console.log("WRITE FILE");
+    //console.log("WRITE FILE");
     const notebookJson = localStorage.getItem(NOTEBOOK_KEY) || "";
-    console.log(notebookJson);
+    //console.log(notebookJson);
     const notebook: NotebookState = wnParse(notebookJson);
-    console.log(notebook);
+    //console.log(notebook);
 
     data[NOTEBOOK_KEY] = notebook;
 
@@ -41,14 +41,14 @@ function App() {
 
     for (const [label, notes] of notebook.labelToNotes)
     {
-      console.log('Notes')
-      console.log(...notes);
-      console.log("List")
-      console.log(noteKeyList);
+      //console.log('Notes')
+      //console.log(...notes);
+      //console.log("List")
+      //console.log(noteKeyList);
       noteKeyList = new Set([...noteKeyList, ...notes]);
     }
 
-    console.log(noteKeyList);
+    //console.log(noteKeyList);
 
     for (const noteKey of noteKeyList)
     {
@@ -117,13 +117,13 @@ function App() {
 
   function loadContentLegacy(content: any)
   {
-    console.log('LOAD CONTENT LEGACY')
+    //console.log('LOAD CONTENT LEGACY')
     // Import legacy JSON
     const notebook: NotebookState = new NotebookState();
 
     function addLabel(noteKey: string, label: string)
     {
-      console.log(`addLabel - key:${noteKey}, label:${label}`)
+      //console.log(`addLabel - key:${noteKey}, label:${label}`)
 
       if ((notebook.labelToNotes.get(label) ?? []).includes(label))
       {
@@ -139,8 +139,8 @@ function App() {
       if (/-element-note-/.test(key))
       {
         console.log("NOTE");
-        console.log(key);
-        console.log(value);
+        //console.log(key);
+        //console.log(value);
         const o = value as {text:string, created:Date, modified:Date};
         let state = new NoteState("");
         state.text = o.text;

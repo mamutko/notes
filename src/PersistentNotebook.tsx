@@ -14,35 +14,48 @@ export class State {
   labelToNotes = new Map<string,string[]>();
 }
 
-function thisMonday()
-{
-  let now = new Date();
-  now.setHours(0,0,0,0);
+export class NoteGroupViewState {
+  label: string = "";
+  collapsed: boolean = false;
+}
 
-  let offset = now.getDay();
-  if (offset == 0)
-  {
-    offset = 6;
-  }
-  else
-  {
-    offset = offset - 1;
-  }
-
-  return new Date(now.setDate(now.getDate() - offset));
+export class ViewState {
+  noteGroups : NoteGroupViewState[] = new Array<NoteGroupViewState>();
 }
 
 function PersistentNotebook(props: Props) {
     const [state, setState] = usePersistentState(props.storageKey, new State())
+    const [viewState, setViewState] = usePersistentState(props.storageKey + "_view", new ViewState())
+
+    let rerender = false;
+
+    for (const label of state.labelToNotes.keys())
+    {
+      if (!viewState.noteGroups.find((noteGroup) => noteGroup.label == label))
+      {
+        let newNoteGroup = new NoteGroupViewState();
+        newNoteGroup.label = label;
+        viewState.noteGroups.push(newNoteGroup);
+
+        rerender = true;
+      }
+    }
+
+    if (rerender)
+    {
+      // TODO: Do not mutate viewState.
+      setViewState(viewState);
+      return <></>;
+    }
 
     function addLabel(noteKey: string, label: string)
     {
-      console.log(`addLabel - key:${noteKey}, label:${label}`)
+      //console.log(`addLabel - key:${noteKey}, label:${label}`)
 
-      if ((state.labelToNotes.get(label) ?? []).includes(label))
+      if ((state.labelToNotes.get(label) ?? []).includes(noteKey))
       {
         // Note already present in label, nothing to do.
-        return;
+        return <></>;
       }
 
       let newState = new State();
@@ -50,10 +63,10 @@ function PersistentNotebook(props: Props) {
       newState.labelToNotes = state.labelToNotes;
       newState.labelToNotes.set(label, [...newState.labelToNotes.get(label) ?? [], noteKey]);
 
-      console.log(newState);
+      //console.log(newState);
 
-      console.log("SET STATE");
-      console.log(newState);
+      //console.log("SET STATE");
+      //console.log(newState);
 
       setState(newState);
     }
@@ -73,12 +86,27 @@ function PersistentNotebook(props: Props) {
       createPersistentNote(addLabel);
     }
 
-    console.log("INITIAL STATEL");
-    console.log(state);
+    function setCollapsed(noteGroupIndex: number)
+    {
+      console.log("setCollapsed:" + noteGroupIndex);
+      viewState.noteGroups[noteGroupIndex].collapsed = !viewState.noteGroups[noteGroupIndex].collapsed;
+      // TODO: do note mutate state.
+      let newViewState = new ViewState();
+      newViewState.noteGroups = viewState.noteGroups;
+      setViewState(newViewState);
+    }
+
+    //console.log("INITIAL STATEL");
+    //console.log(state);
+    // return (<div className={'note-book'}>
+    //   {Array.from(state.labelToNotes).map(([label, notes]) => (
+    //     <NoteGroup key={label} description={label} noteKeyList={notes} collapsed={false} setCollapsed={() => {}} onAddLabel={addLabel} onRemoveLabel={removeLabel}/>
+    //   ))}
+
 
     return (<div className={'note-book'}>
-      {Array.from(state.labelToNotes).map(([label, notes]) => (
-        <NoteGroup description={label} noteKeyList={notes} collapsed={false} setCollapsed={() => {}} onAddLabel={addLabel} onRemoveLabel={removeLabel}/>
+      {Array.from(viewState.noteGroups).map((noteGroup, i) => (
+        <NoteGroup key={noteGroup.label} description={noteGroup.label} noteKeyList={state.labelToNotes.get(noteGroup.label) || []} collapsed={noteGroup.collapsed} setCollapsed={() => {setCollapsed(i);}} onAddLabel={addLabel} onRemoveLabel={removeLabel}/>
       ))}
 
       <button onClick={addNote}>Add Note</button>

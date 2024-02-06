@@ -46,8 +46,8 @@ function WickedNote(props : Props) {
     function onEditorClick(e : any)
     {
         // TODO: process clicks on active tags
-        console.info(`Clicked on element: ${e.target.outerHTML}`)
-        console.log(e);
+        //console.info(`Clicked on element: ${e.target.outerHTML}`)
+        //console.log(e);
 
         if (!e.target.attributes['iActionTag'])
             return;
@@ -56,9 +56,9 @@ function WickedNote(props : Props) {
         let length = e.target.attributes['ilength'].value;
         let actionTag = e.target.attributes['iActionTag'].value;
 
-        console.log(offset);
-        console.log(length);
-        console.log(offset + length);
+        //console.log(offset);
+        //console.log(length);
+        //console.log(offset + length);
         
         props.setText(Unprocess(text.slice(0, offset) + actionTag + text.slice(Number(offset) + Number(length))));
     }

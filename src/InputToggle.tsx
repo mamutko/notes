@@ -15,14 +15,14 @@ function InputToggle(props: any) {
       {
         document.documentElement.style.setProperty('--texarea-pointer-events', 'auto');
         document.documentElement.style.setProperty('--pre-pointer-events', 'none');
-        console.log('input >>> textarea')
+        //console.log('input >>> textarea')
         setIsInputActive(true);
       }
       else
       {
         document.documentElement.style.setProperty('--texarea-pointer-events', 'none');
         document.documentElement.style.setProperty('--pre-pointer-events', 'auto');
-        console.log('input >>> pre')
+        //console.log('input >>> pre')
         setIsInputActive(false);
       }
     }
@@ -52,7 +52,7 @@ function InputToggle(props: any) {
       if (!isInputActive) {
         document.documentElement.style.setProperty('--texarea-pointer-events', 'auto');
         document.documentElement.style.setProperty('--pre-pointer-events', 'none');
-        console.log('input >>> textarea (blur)')
+        //console.log('input >>> textarea (blur)')
         setIsInputActive(true);
       }
     }
