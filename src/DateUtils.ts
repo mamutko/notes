@@ -29,7 +29,8 @@ export function getNextMonday(date: Date): Date
 
 export function getWeekDescription(date: Date): string
 {
-    return `Week of ${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
+    const monday = getMonday(date);
+    return `Week of ${monday.getFullYear()}-${monday.getMonth()+1}-${monday.getDate()}`
     // return `${getMonday(date).toDateString()} - ${getNextMonday(date).toDateString()}`;
 }
 
