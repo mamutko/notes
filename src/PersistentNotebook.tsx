@@ -103,9 +103,29 @@ function PersistentNotebook(props: Props) {
     //     <NoteGroup key={label} description={label} noteKeyList={notes} collapsed={false} setCollapsed={() => {}} onAddLabel={addLabel} onRemoveLabel={removeLabel}/>
     //   ))}
 
+    function indexMapFunc(noteGroup: NoteGroupViewState, index: number): [NoteGroupViewState, number]
+    {
+      return [noteGroup, index]
+    }
+
+    function filterFunc(noteGroupPair: [NoteGroupViewState, number]): boolean
+    {
+      const [noteGroup, index] = noteGroupPair;
+
+      return (state.labelToNotes.get(noteGroup.label) ?? []).length > 0;
+    }
+
+    function sortFunc(a: [NoteGroupViewState, number], b: [NoteGroupViewState, number]): number
+    {
+      const [noteGroupA, indexA] = a;
+      const [noteGroupB, indexB] = b;
+
+      return noteGroupA.label.localeCompare(noteGroupB.label);
+    }
+
 
     return (<div className={'note-book'}>
-      {Array.from(viewState.noteGroups).map((noteGroup, i) => (
+      {Array.from(viewState.noteGroups).map(indexMapFunc).filter(filterFunc).sort(sortFunc).map(([noteGroup, i]) => (
         <NoteGroup key={noteGroup.label} description={noteGroup.label} noteKeyList={state.labelToNotes.get(noteGroup.label) || []} collapsed={noteGroup.collapsed} setCollapsed={() => {setCollapsed(i);}} onAddLabel={addLabel} onRemoveLabel={removeLabel}/>
       ))}
 

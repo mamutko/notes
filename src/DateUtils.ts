@@ -30,7 +30,7 @@ export function getNextMonday(date: Date): Date
 export function getWeekDescription(date: Date): string
 {
     const monday = getMonday(date);
-    return `Week of ${monday.getFullYear()}-${monday.getMonth()+1}-${monday.getDate()}`
+    return `Week of ${monday.toLocaleDateString('en-CA')}`
     // return `${getMonday(date).toDateString()} - ${getNextMonday(date).toDateString()}`;
 }
 

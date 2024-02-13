@@ -113,13 +113,19 @@ function Highlight(text : string) : string
     return text;
 }
 
-export function GetLabels(text: string, created: Date, modified: Date): string[]
+export function GetLabels(text: string, created: Date, referenced: Date, modified: Date): string[]
 {
     let labels = new Array<string>();
 
-    console.log(created);
-    labels.push(getWeekDescription(created))
-    console.log(created);
+    if (text.indexOf("#DELETED") >= 0)
+    {
+        labels.push('#DELETED');
+        // No other labels on deleted notes.
+        return labels;
+    }
+
+    labels.push(getWeekDescription(referenced))
+    console.log(referenced);
 
 
     if (text.indexOf("#FAV") >= 0)
@@ -132,9 +138,9 @@ export function GetLabels(text: string, created: Date, modified: Date): string[]
         labels.push('#TODO');
     }
 
-    if (text.indexOf("#HEY") >= 0)
+    if (text.indexOf("#BUMP") >= 0)
     {
-        labels.push('#HEY');
+        labels.push('#BUMP');
     }
 
     console.log(`Labels: ${labels} for date ${created}.`);
