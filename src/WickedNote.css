@@ -93,6 +93,10 @@ pointer-events: var(--pre-pointer-events, auto) !important;
   background:rgba(100, 100, 0, 0.3);
 }
 
+.wicked-note-editor:has(.wicked-note-heading .wicked-note-tag-scroll) {
+  max-height:200px;
+  overflow-y:auto;
+}
 
 .wicked-note-mention{
     color:lightgreen;    
