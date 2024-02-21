@@ -36,3 +36,16 @@
     transform: rotate(360deg);
   }
 }
+
+.app-nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgb(61, 6, 6);
+  padding: 8px;
+  border-bottom: 4px solid rgba(0, 0, 0, 0.377);
+}
+
+.app-nav-bar a{
+  color: white;
+}

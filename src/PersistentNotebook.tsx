@@ -8,6 +8,7 @@ import NoteGroup from "./NoteGroup";
 
 export interface Props {
   storageKey : string;
+  filter: string;
 }
 
 export class State {
@@ -19,13 +20,15 @@ export class NoteGroupViewState {
   collapsed: boolean = false;
 }
 
-export class ViewState {
+export class NotebookState {
   noteGroups : NoteGroupViewState[] = new Array<NoteGroupViewState>();
 }
 
 function PersistentNotebook(props: Props) {
     const [state, setState] = usePersistentState(props.storageKey, new State())
-    const [viewState, setViewState] = usePersistentState(props.storageKey + "_view", new ViewState())
+    const [viewState, setViewState] = usePersistentState(props.storageKey + "_view", new NotebookState())
+
+    console.log(`Notebook filter: ${props.filter}.`)
 
     let rerender = false;
 
@@ -91,7 +94,7 @@ function PersistentNotebook(props: Props) {
       console.log("setCollapsed:" + noteGroupIndex);
       viewState.noteGroups[noteGroupIndex].collapsed = !viewState.noteGroups[noteGroupIndex].collapsed;
       // TODO: do note mutate state.
-      let newViewState = new ViewState();
+      let newViewState = new NotebookState();
       newViewState.noteGroups = viewState.noteGroups;
       setViewState(newViewState);
     }
@@ -111,6 +114,13 @@ function PersistentNotebook(props: Props) {
     function filterFunc(noteGroupPair: [NoteGroupViewState, number]): boolean
     {
       const [noteGroup, index] = noteGroupPair;
+
+      if (!new RegExp(props.filter).test(noteGroup.label))
+      {
+        // TODO: Performance, we prepare state for all noteGroups - but then drop those that don't fit filter - only prepare the ones we need?
+        // TODO: NoteGroupViewState should be per NotebookView - so independent of this component.
+        return false;
+      }
 
       return (state.labelToNotes.get(noteGroup.label) ?? []).length > 0;
     }
