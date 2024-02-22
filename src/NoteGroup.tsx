@@ -1,5 +1,5 @@
 import { Key } from "react";
-import PersistentNote from "./PersistentNote";
+import PersistentNote, { RenderType } from "./PersistentNote";
 import usePersistentState, { initializePersistentState } from "./PersistentState";
 import "./PersistentNoteGroup.css"
 
@@ -37,6 +37,12 @@ function NoteGroup(props: Props) {
 
       return description;
     }
+
+    const collapsed = props.description == "#FAV" ? false : props.collapsed;
+    const render = props.description == "#FAV" && props.collapsed ? RenderType.Favourites : RenderType.Editable;
+
+    console.log(props.description)
+    console.log(props.description == "#FAV")
   
     return (
     <div className='note-group'>
@@ -46,13 +52,13 @@ function NoteGroup(props: Props) {
         </div>
         <button className='note-group-collapse-button' onClick={() => props.setCollapsed(!props.collapsed)}>{props.collapsed ? "Expand" : "Collapse"}</button>
       </div>
-      {!props.collapsed && (<>
+      {!collapsed && (<>
         {props.noteKeyList.map((noteKey: string) => (
-          <PersistentNote key={noteKey} storageKey={noteKey} onAddLabel={props.onAddLabel} onRemoveLabel={props.onRemoveLabel}/>
+          <PersistentNote key={noteKey} storageKey={noteKey} onAddLabel={props.onAddLabel} onRemoveLabel={props.onRemoveLabel} render={render}/>
         ))}
 
       </>)}
-      {props.collapsed && (
+      {collapsed && (
             <div className="note-group-collapsed-body">... {props.noteKeyList.length} notes. <button onClick={() => props.setCollapsed(!props.collapsed)}>Expand</button></div>
         )}
     </div>

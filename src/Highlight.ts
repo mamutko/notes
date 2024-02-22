@@ -76,7 +76,7 @@ function Highlight(text : string) : string
 
  
     // At-mention
-    text = text.replaceAll(/(@\w+)/g, '<span class="wicked-note-mention">$1</span>');
+    text = text.replaceAll(/(?<=^|\s|\n)(@\w+)/g, '<span class="wicked-note-mention">$1</span>');
 
     // Http link.
     // TODO: Remove hardcoded server address - the path depends on how the app is setup on GitHub pages.
@@ -113,6 +113,28 @@ function Highlight(text : string) : string
     return text;
 }
 
+export function HighlightFavourites(text : string) : string
+{
+    const favRegex = /^(?<indent>\s*).*#FAV\W+-?\s*(?<label>.*?)\s*-?\s*((?<url>https?:\/\/.+?(?=\s|\n|$))|$)/gmi
+    
+    const favLines = [...text.matchAll(favRegex)].map(match => {
+        console.log('match!!!')
+        if (!match.groups)
+            return '';
+
+        if (match.groups['url'])
+        {
+            // TODO: code repetition - this formulation of the PageOpener URL is in two places (Hightlight and here)
+            // TODO: provide an option to not use PageOpener
+            return `${match.groups['indent']}<a href="/notes/#/open?url=${btoa(match.groups['url'])}" target="PageOpener">${match.groups['label']}`;
+        }
+
+        return `${match.groups['indent']}${match.groups['label']}`;
+    })
+
+    return favLines.join('<BR>');
+}
+
 export function GetLabels(text: string, created: Date, referenced: Date, modified: Date): string[]
 {
     let labels = new Array<string>();
@@ -127,25 +149,18 @@ export function GetLabels(text: string, created: Date, referenced: Date, modifie
     labels.push(getWeekDescription(referenced))
     console.log(referenced);
 
+    // TODO: remove duplication of regexes across Hightlight() and GetLabels().
 
-    if (text.indexOf("#FAV") >= 0)
-    {
-        labels.push('#FAV');
-    }
+    [...text.matchAll(/(?<=^|\s|\n)(#\w+)/g)].map(match => {
+        labels.push(match[0].toLocaleUpperCase());
+    });
 
-    if (text.indexOf("#TODO") >= 0)
-    {
-        labels.push('#TODO');
-    }
+    [...text.matchAll(/(?<=^|\s|\n)(@\w+)/g)].map(match => {
+        labels.push(match[0].toLocaleUpperCase());
+    });
 
-    if (text.indexOf("#BUMP") >= 0)
-    {
-        labels.push('#BUMP');
-    }
-
+    labels = [... new Set(labels)];
     console.log(`Labels: ${labels} for date ${created}.`);
-
-
     return labels;
 }
 

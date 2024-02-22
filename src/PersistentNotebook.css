@@ -1,3 +1,20 @@
 .note-book {
     color:inherit;
 }
+
+.favourites-container {
+    text-align: left;
+}
+
+.favourites-container a {
+    color:skyblue;
+    text-decoration:none;
+  
+}
+
+.favourites-container a:hover {
+    outline: 2px solid rgba(2, 111, 253, 0.24);
+    background: rgba(2, 111, 253, 0.24);
+    border-radius: 3px;
+    text-shadow: 1px 1px 4px;
+  }

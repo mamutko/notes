@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import Editor from 'react-simple-code-editor'
 import './WickedNote.css';
-import Highlight, { GetLabels } from './Highlight';
+import Highlight, { GetLabels, HighlightFavourites } from './Highlight';
 import usePersistentState, { initializePersistentState } from './PersistentState';
 import WickedNote from './WickedNote';
 
+export enum RenderType {
+    Editable,
+    Favourites,
+} 
+
 export interface Props {
     storageKey : string;
+    render: RenderType;
     onAddLabel: (noteKey: string, label: string) => void;
     onRemoveLabel: (noteKey: string, label: string) => void;
 }
@@ -103,13 +109,23 @@ function PersistentNote(props : Props) {
     useEffect(() => onSetText(state.text), []);
     
     // TODO: Consider removing timestamp-container?
-    return <>
-        <div className='wicked-note-timestamp-container'>
-            <div>Created: {state.created.toString()}</div>
-            <div>Modified: {state.modified.toString()}</div>
-        </div>
-        <WickedNote text={state.text} setText={onSetText}/>
-        </>;
+    // <div className='wicked-note-timestamp-container'>
+    // <div>Created: {state.created.toString()}</div>
+    // <div>Modified: {state.modified.toString()}</div>
+    // </div>
+
+    if (props.render === RenderType.Editable)
+    {
+        return <WickedNote text={state.text} setText={onSetText}/>;
+    }
+
+    if (props.render === RenderType.Favourites)
+    {
+        return <pre className="favourites-container" dangerouslySetInnerHTML={{__html:HighlightFavourites(state.text)}}>{}</pre>;
+    }
+
+    // Unreachable.
+    return <></>;
 }
 
 export default PersistentNote;
