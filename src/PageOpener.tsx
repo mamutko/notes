@@ -44,16 +44,28 @@ function PageOpener(props: Props)
         if (!url)
             return;
 
-     if (url.match('{cb}') || url.match('{cbf}'))
+        const cbPlaceholder = /{cb(?<format>f)?(|(?<default>.*?))?}/g;
+
+        if (cbPlaceholder.test(url))
         {
             navigator.clipboard.readText().then((cb) => {
-                let urlNew = url.replace('{cb}',cb);
                 let cbf = normalizeValue(cb);
-                urlNew = urlNew.replace('{cbf}',cbf);
 
-                window.open(urlNew, '_blank');
+                const newUrl = url.replaceAll(cbPlaceholder, (match, format, defaultContainer, defaultValue, offset, text, groups) => {
+                    // TODO: use default value
+                    if (format)
+                    {
+                        return cbf;
+                    }
+                    else
+                    {
+                        return cb;
+                    }
+                });
+
+                window.open(newUrl, '_blank');
             })
-        }
+         }
         else
         {
             window.open(url, '_blank');

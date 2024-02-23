@@ -126,7 +126,7 @@ export function HighlightFavourites(text : string) : string
         {
             // TODO: code repetition - this formulation of the PageOpener URL is in two places (Hightlight and here)
             // TODO: provide an option to not use PageOpener
-            return `${match.groups['indent']}<a href="/notes/#/open?url=${btoa(match.groups['url'])}" target="PageOpener">${match.groups['label']}`;
+            return `${match.groups['indent']}<a href="/notes/#/open?url=${btoa(match.groups['url'])}" target="PageOpener">${match.groups['label']}</a>`;
         }
 
         return `${match.groups['indent']}${match.groups['label']}`;
