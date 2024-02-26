@@ -7,7 +7,7 @@ import PersistentNote, { State as NoteState, createPersistentNote } from './Pers
 import PersistentNotebook, { State as NotebookState} from './PersistentNotebook';
 import PageOpener from './PageOpener';
 import { wnParse, wnStringify } from './PersistentState';
-import { State as AppState } from './App';
+import { State as AppState, NotebookView } from './App';
 
 
 export const NOTEBOOK_KEY:string = "notebook_v12"
@@ -185,6 +185,36 @@ function Settings(props: Props) {
     props.setAppState(newState);
   }
 
+  function addView()
+  {
+    let newState = new AppState();
+
+    // TODO: do proper cloning of AppState.
+    newState.views = props.appState.views;
+
+    const newView = new NotebookView();
+    newView.name = "New View";
+    newView.filter = ".*";
+    newState.views.push(newView);
+
+    props.setAppState(newState);
+  }
+
+  function removeView(viewIndex: number)
+  {
+    let newState = new AppState();
+
+    // TODO: do proper cloning of AppState.
+    newState.views = props.appState.views;
+    
+    console.log(newState.views.length);
+    newState.views.splice(viewIndex, 1);
+    console.log(newState.views.length);
+    console.log(`Splice - ${viewIndex}`);
+
+    props.setAppState(newState);
+  }
+
   return (
     <div className="Settings">
       <div>
@@ -197,8 +227,12 @@ function Settings(props: Props) {
           <div>
             <input value={view.name} onChange={e => setViewName(index, e.target.value)} />
             <input value={view.filter}  onChange={e => setViewFilter(index, e.target.value)}/>
+            <button onClick={() => removeView(index)}>Remove</button>
           </div>
         ))}
+      </div>
+      <div>
+        <button onClick={() => addView()}>Add View</button>
       </div>
     </div>
   );
