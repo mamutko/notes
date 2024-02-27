@@ -44,8 +44,33 @@
   background: rgb(61, 6, 6);
   padding: 8px;
   border-bottom: 4px solid rgba(0, 0, 0, 0.377);
+  flex-wrap:nowrap;
+  flex-direction: row;
+  display: flex;
 }
 
-.app-nav-bar a{
+.app-nav-bar-link{
   color: white;
+  text-decoration: none;
+  padding-left: 4px;
+  padding-right: 4px;
+  margin-left:8px;
+  margin-righ:8px;
+  border-bottom: 4px solid rgba(128, 128, 128, 0.253);
 }
+
+.app-nav-bar-link:hover{
+  border-bottom: 4px solid grey;
+  text-shadow: 1px 1px 4px;
+  background: rgba(255, 255, 255, 0.199);
+}
+
+.app-nav-bar-active-link{
+  border-bottom: 4px solid red;
+  background: rgba(255, 255, 255, 0.199);
+}
+
+.app-nav-bar-active-link:hover{
+  border-bottom: 4px solid red;
+}
+

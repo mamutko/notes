@@ -8,7 +8,7 @@ import PersistentNotebook, { State as NotebookState} from './PersistentNotebook'
 import PageOpener from './PageOpener';
 import usePersistentState, { wnParse, wnStringify } from './PersistentState';
 import Settings, { NOTEBOOK_KEY } from './Settings';
-import { HashRouter, Link, Route, Routes, ScrollRestoration, useParams } from 'react-router-dom';
+import { HashRouter, Link, NavLink, Route, Routes, ScrollRestoration, useParams } from 'react-router-dom';
 
 export class NotebookView {
   name: string = "Journal";
@@ -39,19 +39,22 @@ function App() {
 
   const [state, setState] = usePersistentState("appstate_v2", initialState());
 
+  function navlinkClass(props: any)
+  {
+    const {isActive} = props;
+    return isActive ? 'app-nav-bar-link app-nav-bar-active-link' : 'app-nav-bar-link';
+  }
+
   return (
     <div className="App">
       <HashRouter>
-        <div className='app-nav-bar'>
+        <div className='app-nav-bar' >
           {
-            state.views.map((view, index) => (<>
-              <Link to={`/view/${index}`}>{view.name}</Link>
-              &nbsp;|&nbsp;
-              </>
-            ))
+            state.views.map((view, index) => (<NavLink className={navlinkClass} to={`/view/${index}`}>{view.name}</NavLink>))
           }
-          <Link to="/">Home</Link>&nbsp;|&nbsp;
-          <Link to="/settings">Settings</Link>
+          <div style={{flexGrow:100}}></div>
+          <NavLink className={navlinkClass}  to="/">&#x2302;</NavLink>
+          <NavLink className={navlinkClass}  to="/settings">&#x2699;</NavLink>
         </div>
         <Routes>
           <Route path="/open" element={<PageOpener/>}/>

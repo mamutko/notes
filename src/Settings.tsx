@@ -206,11 +206,8 @@ function Settings(props: Props) {
 
     // TODO: do proper cloning of AppState.
     newState.views = props.appState.views;
-    
-    console.log(newState.views.length);
+
     newState.views.splice(viewIndex, 1);
-    console.log(newState.views.length);
-    console.log(`Splice - ${viewIndex}`);
 
     props.setAppState(newState);
   }
