@@ -85,7 +85,7 @@ export function NotebookViewComponent(props:any) {
 
   console.log(`viewId: ${viewId}`)
   
-  return             <div ref={ref} style={{height: "100%", overflow: 'auto'}}>
+  return             <div ref={ref} className='notebook-view-container'>
   <h1>{viewProps.name}</h1>
   <PersistentNotebook filter={viewProps.filter} storageKey={NOTEBOOK_KEY} />
 </div>;

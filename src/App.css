@@ -55,6 +55,12 @@
   overflow: auto;
 }
 
+.notebook-view-container {
+  height: 100%;
+  overflow: auto;
+  scrollbar-color: rgba(128, 128, 128, 0.5) rgba(0, 0, 0, 0);
+}
+
 .app-nav-bar-element{
   padding: 6px;
   border-bottom: 4px solid rgba(128, 128, 128, 0.24);
