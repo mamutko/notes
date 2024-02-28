@@ -9,11 +9,13 @@ import PageOpener from './PageOpener';
 import usePersistentState, { wnParse, wnStringify } from './PersistentState';
 import Settings, { NOTEBOOK_KEY } from './Settings';
 import { HashRouter, Link, NavLink, Route, Routes, ScrollRestoration, useParams } from 'react-router-dom';
+import { useScrollRestoration } from 'use-scroll-restoration';
 
 export class NotebookView {
   name: string = "Journal";
   filter: string = "^Week of.*$";
   editable: boolean = false;
+  popup: boolean = false;
 }
 
 export class State {
@@ -42,7 +44,7 @@ function App() {
   function navlinkClass(props: any)
   {
     const {isActive} = props;
-    return isActive ? 'app-nav-bar-link app-nav-bar-active-link' : 'app-nav-bar-link';
+    return isActive ? 'app-nav-bar-element app-nav-bar-link app-nav-bar-active-link' : 'app-nav-bar-element app-nav-bar-link';
   }
 
   return (
@@ -52,18 +54,20 @@ function App() {
           {
             state.views.map((view, index) => (<NavLink className={navlinkClass} to={`/view/${index}`}>{view.name}</NavLink>))
           }
-          <div style={{flexGrow:100}}></div>
+          <div className='app-nav-bar-element' style={{flexGrow:100}}></div>
           <NavLink className={navlinkClass}  to="/">&#x2302;</NavLink>
           <NavLink className={navlinkClass}  to="/settings">&#x2699;</NavLink>
         </div>
-        <Routes>
-          <Route path="/open" element={<PageOpener/>}/>
-          <Route path="/settings" element={<Settings appState={state} setAppState={setState}/>}/>
-          <Route path="/view/:viewId" element={
-            <NotebookViewComponent state={state}/>
-            
-          }/>
-        </Routes>
+        <div className='app-content'>
+          <Routes>
+            <Route path="/open" element={<PageOpener/>}/>
+            <Route path="/settings" element={<Settings appState={state} setAppState={setState}/>}/>
+            <Route path="/view/:viewId" element={
+              <NotebookViewComponent state={state}/>
+              
+            }/>
+          </Routes>
+        </div>
       </HashRouter>
 
     </div>
@@ -74,11 +78,14 @@ export function NotebookViewComponent(props:any) {
   // TODO: Refactor, move component into separate file. Should it access useParams() here?
   const { viewId } = useParams();
 
+  // TODO: review scroll key format. It's tied to view index.
+  const {ref, setScroll} = useScrollRestoration(`nv_scroll_context_v1_${viewId ?? "0"}`, {debounceTime:200, persist:'localStorage'});
+
   const viewProps = props.state.views[Number(viewId ?? "0")];
 
   console.log(`viewId: ${viewId}`)
   
-  return             <div>
+  return             <div ref={ref} style={{height: "100%", overflow: 'auto'}}>
   <h1>{viewProps.name}</h1>
   <PersistentNotebook filter={viewProps.filter} storageKey={NOTEBOOK_KEY} />
 </div>;

@@ -12,6 +12,8 @@ npm install react-simple-code-editor
 
 npm install react-router-dom
 
+npm install use-scroll-restoration
+
 ### Deploy localy
 
 npm install -g serve

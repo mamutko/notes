@@ -38,6 +38,7 @@ function NoteGroup(props: Props) {
       return description;
     }
 
+    // TODO: Hardcoded rendering of #FAV group. Get this from settings.
     const collapsed = props.description == "#FAV" ? false : props.collapsed;
     const render = props.description == "#FAV" && props.collapsed ? RenderType.Favourites : RenderType.Editable;
 

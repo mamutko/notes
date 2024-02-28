@@ -1,4 +1,4 @@
-import { Key } from "react";
+import { Key, useEffect, useRef } from "react";
 import PersistentNote, { createPersistentNote } from "./PersistentNote";
 import usePersistentState from "./PersistentState";
 //import PersistentNoteGroup, { createNoteGroup } from "./PersistentNoteGroup";
@@ -58,7 +58,7 @@ function PersistentNotebook(props: Props) {
       if ((state.labelToNotes.get(label) ?? []).includes(noteKey))
       {
         // Note already present in label, nothing to do.
-        return <></>;
+        return;
       }
 
       let newState = new State();

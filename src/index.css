@@ -9,6 +9,11 @@ body {
   background:rgb(20, 20, 20);
 }
 
+html, body, #root {
+  margin: 0;
+  height: 100%;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
