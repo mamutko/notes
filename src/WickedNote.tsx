@@ -7,6 +7,7 @@ import Highlight from './Highlight';
 export interface Props {
     text : string;
     setText : (text : string) => void
+    onBlur : (text: string) => void
 }
 
 // Processes the note text to display an alternate text and returns the new note text and
@@ -66,7 +67,7 @@ function WickedNote(props : Props) {
     return (
         <div className="wicked-note">
         <div className="wicked-note-editor" onClick={onEditorClick}>
-            <Editor value={text} highlight = {Highlight} preClassName={'wicked-note-enclosing-pre'}
+            <Editor onBlur={() => { console.log("BLLLlUUUUUUUUUUUUUR!!!"); props.onBlur(text)}} value={text} highlight = {Highlight} preClassName={'wicked-note-enclosing-pre'}
         onValueChange={text => props.setText(Unprocess(text))} />
         </div>
         {followUpCount > 0 && (

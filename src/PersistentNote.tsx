@@ -8,18 +8,17 @@ import WickedNote from './WickedNote';
 export enum RenderType {
     Editable,
     Favourites,
-} 
+}
 
 export interface Props {
-    storageKey : string;
+    storageKey: string;
     render: RenderType;
     onAddLabel: (noteKey: string, label: string) => void;
     onRemoveLabel: (noteKey: string, label: string) => void;
 }
 
 export class State {
-    constructor(text: string)
-    {
+    constructor(text: string) {
         this.text = text;
         this.labels = new Array<string>()
         this.created = new Date();
@@ -35,24 +34,21 @@ export class State {
 
 }
 
-export function createPersistentNote(onAddLabel: (noteKey: string, label: string) => void, initialState: State = new State(""))
-{
+export function createPersistentNote(onAddLabel: (noteKey: string, label: string) => void, initialState: State = new State("")) {
     // We will identify each note by it's creation time.
     const key = `note_v1_${initialState.created.getTime().toString()}`;
     initialState.labels = GetLabels(initialState.text, initialState.created, initialState.referenced, initialState.modified);
 
     initializePersistentState(key, initialState);
 
-    for (const label of initialState.labels)
-    {
+    for (const label of initialState.labels) {
         onAddLabel(key, label);
     }
 
     return key;
 }
 
-function cloneState(current: State, newText: string) : State
-{
+function cloneState(current: State, newText: string): State {
     let newState = new State(newText);
     newState.created = current.created;
     newState.referenced = current.referenced;
@@ -61,67 +57,66 @@ function cloneState(current: State, newText: string) : State
     return newState;
 }
 
-function PersistentNote(props : Props) {
-    
+function PersistentNote(props: Props) {
+
     const [state, setState] = usePersistentState(props.storageKey, new State(""));
 
     // TODO: create universal way to update objects on schema changes
     // here, we added "referenced" and we need to backfill it.
-    if (!state.referenced)
-    {
+    if (!state.referenced) {
         console.log("!!!!!!! FIX UP note state.")
         state.referenced = state.created;
     }
 
-    function onSetText(text: string)
-    {
+    function onSetText(text: string, updateLabels: boolean) {
         let newState = cloneState(state, text);
+
+        if (!updateLabels)
+        {
+            setState(newState);
+            return;
+        }
+
         newState.labels = GetLabels(newState.text, newState.created, newState.referenced, newState.modified);
 
         let newLabels = newState.labels.filter(label => !state.labels.includes(label));
         let removedLabels = state.labels.filter(label => !newState.labels.includes(label));
 
-        if (state.text == newState.text && !newLabels && !removedLabels)
-        {
+        if (state.text == newState.text && !newLabels && !removedLabels) {
             return;
         }
 
-        if (newLabels.find((label) => label.toUpperCase() == "#BUMP"))
-        {
+        if (newLabels.find((label) => label.toUpperCase() == "#BUMP")) {
             newState.referenced = newState.modified;
         }
 
         setState(newState);
 
-        for (let label of newLabels)
-        {
+        for (let label of newLabels) {
             props.onAddLabel(props.storageKey, label);
         }
 
-        for (let label of removedLabels)
-        {
+        for (let label of removedLabels) {
             props.onRemoveLabel(props.storageKey, label);
         }
     }
 
     // TODO: not necessary to do this on each render. The labels should be up to date unless
     // we changed how labels are parsed out of the text.
-    useEffect(() => onSetText(state.text), []);
-    
+    useEffect(() => onSetText(state.text, true), []);
+
     // TODO: Consider removing timestamp-container?
     // <div className='wicked-note-timestamp-container'>
     // <div>Created: {state.created.toString()}</div>
     // <div>Modified: {state.modified.toString()}</div>
     // </div>
 
-    if (props.render === RenderType.Editable)
-    {
-        return <WickedNote text={state.text} setText={onSetText}/>;
+    if (props.render === RenderType.Editable) {
+        return <WickedNote text={state.text} setText={(text) => onSetText(text, false)} onBlur={(text) => onSetText(text, true)}/>;
     }
 
-    if (props.render === RenderType.Favourites)
-    {
-        return <pre className="favourites-container" dangerouslySetInnerHTML={{__html:HighlightFavourites(state.text)}}>{}</pre>;
+    if (props.render === RenderType.Favourites) {
+        return <pre className="favourites-container" dangerouslySetInnerHTML={{ __html: HighlightFavourites(state.text) }}>{ }</pre>;
     }
 
     // Unreachable.
